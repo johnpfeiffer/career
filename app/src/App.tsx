@@ -1,0 +1,97 @@
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { RouterProvider, createBrowserRouter, defer, Outlet } from "react-router-dom";
+import ChatPage from "./components/ChatPage";
+import HomePage from "./components/HomePage";
+import LabelPage from "./components/LabelPage";
+import SourcesPage from "./components/SourcesPage";
+import Footer from "./components/Footer";
+import { Link } from "./models/link";
+import type { LinkRecord } from "./types";
+
+let linksPromise: Promise<LinkRecord[]> | undefined;
+
+function loadLinksOnce(): Promise<LinkRecord[]> {
+  if (!linksPromise) {
+    linksPromise = Link.loadAll();
+  }
+  return linksPromise;
+}
+
+function linksRootLoader() {
+  return defer({
+    links: loadLinksOnce(),
+  });
+}
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    id: "root",
+    loader: linksRootLoader,
+    element: <Outlet />,
+    children: [
+      {
+        path: "sources/*",
+        element: <SourcesPage />,
+      },
+      {
+        path: ":app/sources/*",
+        element: <SourcesPage />,
+      },
+      {
+        path: "_chat",
+        element: <ChatPage />,
+      },
+      {
+        path: ":app/_chat",
+        element: <ChatPage />,
+      },
+      {
+        path: "_label",
+        element: <LabelPage />,
+      },
+      {
+        path: ":app/_label",
+        element: <LabelPage />,
+      },
+      {
+        path: "tags/*",
+        element: <HomePage />,
+      },
+      {
+        path: ":app/tags/*",
+        element: <HomePage />,
+      },
+      {
+        path: ":app",
+        element: <HomePage />,
+      },
+      {
+        index: true,
+        element: <HomePage />,
+      },
+    ],
+  },
+]);
+
+const theme = createTheme({
+  typography: {
+    fontSize: 16,
+  },
+  palette: {
+    background: {
+      default: "#ffffff",
+      paper: "#ffffff",
+    },
+  },
+});
+
+export default function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <RouterProvider router={router} />
+      <Footer />
+    </ThemeProvider>
+  );
+}
