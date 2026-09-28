@@ -1,0 +1,46 @@
+{
+  "id": "engineering-manager",
+  "label": "Engineering Manager",
+  "title": "Engineering manager ladder",
+  "description": "Explore the draft manager ladder across results, people, and vision and strategy. The source directs readers to a manager or HR for official guidance.",
+  "levels": [
+    { "id": "manager", "label": "Engineering Manager", "shortLabel": "EM" },
+    { "id": "manager-2", "label": "Engineering Manager II", "shortLabel": "EM II" },
+    { "id": "senior-manager", "label": "Senior Engineering Manager", "shortLabel": "Senior" },
+    { "id": "principal-manager", "label": "Principal Engineering Manager", "shortLabel": "Principal" },
+    { "id": "director", "label": "Director of Engineering", "shortLabel": "Director" }
+  ],
+  "defaultProfile": { "results": 2, "manager-people": 2, "manager-strategy": 1 },
+  "axes": [
+    {
+      "id": "results", "label": "Results", "description": "Set goals, measure outcomes, and sustain accountability at increasing scope.",
+      "levels": [
+        { "summary": "Set measurable goals for direct reports, align their work with team goals, and monitor feedback loops.", "sourceRefs": ["manager"] },
+        { "summary": "Set team goals, earn team buy-in, intervene when feedback shows a problem, and hold the team accountable.", "sourceRefs": ["manager"] },
+        { "summary": "Align goals and outcomes across multiple teams, improve feedback loops, and unblock delivery.", "sourceRefs": ["manager"] },
+        { "summary": "Coordinate goals and dependencies between teams, design feedback loops, and hold team leads accountable.", "sourceRefs": ["manager"] },
+        { "summary": "Align department goals with the business, prioritize critical outcomes, and hold managers accountable.", "sourceRefs": ["manager"] }
+      ]
+    },
+    {
+      "id": "manager-people", "label": "People", "description": "Hire, coach, develop, and support teams as managerial scope expands.",
+      "levels": [
+        { "summary": "Run regular one-on-ones, execute a team hiring plan, and discuss each report's development.", "sourceRefs": ["manager"] },
+        { "summary": "Own the team interview process, understand career ambitions, and identify useful training.", "sourceRefs": ["manager"] },
+        { "summary": "Improve hiring and create growth opportunities, promotion coaching, and training across teams.", "sourceRefs": ["manager"] },
+        { "summary": "Improve hiring across teams and contribute to consistent career and training frameworks.", "sourceRefs": ["manager"] },
+        { "summary": "Plan organizational hiring, improve engineering-wide interviewing, and maintain career ladder standards.", "sourceRefs": ["manager"] }
+      ]
+    },
+    {
+      "id": "manager-strategy", "label": "Vision and Strategy", "description": "Communicate a destination, define how to reach it, and measure alignment.",
+      "levels": [
+        { "summary": "Understand the company and team vision, communicate it to direct reports, and align team work.", "sourceRefs": ["manager"] },
+        { "summary": "Identify a team area that needs clearer vision or strategy and improve how progress is measured.", "sourceRefs": ["manager"] },
+        { "summary": "Define a vision and strategy for multiple teams with metrics that indicate progress.", "sourceRefs": ["manager"] },
+        { "summary": "Coordinate vision across teams and plan for cross-departmental effects and adoption.", "sourceRefs": ["manager"] },
+        { "summary": "Manage multiple strategies and establish a framework for tracking success and alignment across the department.", "sourceRefs": ["manager"] }
+      ]
+    }
+  ]
+}

@@ -1,97 +1,72 @@
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import { RouterProvider, createBrowserRouter, defer, Outlet } from "react-router-dom";
-import ChatPage from "./components/ChatPage";
+import { useEffect, useState } from "react";
+import { AppBar, Box, Container, CssBaseline, FormControl, InputLabel, MenuItem, Select, ThemeProvider, Toolbar, Typography, createTheme } from "@mui/material";
+import { Link, Navigate, Outlet, RouterProvider, createBrowserRouter, useNavigate } from "react-router-dom";
 import HomePage from "./components/HomePage";
-import LabelPage from "./components/LabelPage";
-import SourcesPage from "./components/SourcesPage";
-import Footer from "./components/Footer";
-import { Link } from "./models/link";
-import type { LinkRecord } from "./types";
+import { careerViews, type ViewId } from "./models/ladder";
 
-let linksPromise: Promise<LinkRecord[]> | undefined;
+const viewStorageKey = "career-coach-view-v1";
 
-function loadLinksOnce(): Promise<LinkRecord[]> {
-  if (!linksPromise) {
-    linksPromise = Link.loadAll();
-  }
-  return linksPromise;
+function readViewId(): ViewId {
+  const saved = localStorage.getItem(viewStorageKey);
+  return careerViews.some((view) => view.id === saved) ? saved as ViewId : "general";
 }
 
-function linksRootLoader() {
-  return defer({
-    links: loadLinksOnce(),
-  });
+function Layout() {
+  const [viewId, setViewId] = useState<ViewId>(readViewId);
+  const navigate = useNavigate();
+
+  useEffect(() => { localStorage.setItem(viewStorageKey, viewId); }, [viewId]);
+
+  return (
+    <>
+      <AppBar position="static" color="transparent" elevation={0} sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Container maxWidth="lg">
+          <Toolbar disableGutters sx={{ gap: 2 }}>
+            <Typography variant="subtitle1" component={Link} to="/" sx={{ color: "text.primary", textDecoration: "none", fontWeight: 600, flexGrow: 1 }}>
+              Career Coach
+            </Typography>
+            <FormControl size="small" sx={{ minWidth: { xs: 165, sm: 210 } }}>
+              <InputLabel id="view-select-label">View</InputLabel>
+              <Select
+                labelId="view-select-label"
+                value={viewId}
+                label="View"
+                onChange={(event) => { setViewId(event.target.value as ViewId); navigate("/"); }}
+              >
+                {careerViews.map((view) => <MenuItem key={view.id} value={view.id}>{view.label}</MenuItem>)}
+              </Select>
+            </FormControl>
+          </Toolbar>
+        </Container>
+      </AppBar>
+      <Outlet context={{ viewId }} />
+      <Box component="footer" sx={{ borderTop: 1, borderColor: "divider", py: 3, mt: 6 }}>
+        <Container maxWidth="lg">
+          <Typography variant="body2" color="text.secondary">Engineering career development reference</Typography>
+        </Container>
+      </Box>
+    </>
+  );
 }
 
 const router = createBrowserRouter([
   {
     path: "/",
-    id: "root",
-    loader: linksRootLoader,
-    element: <Outlet />,
+    element: <Layout />,
     children: [
-      {
-        path: "sources/*",
-        element: <SourcesPage />,
-      },
-      {
-        path: ":app/sources/*",
-        element: <SourcesPage />,
-      },
-      {
-        path: "_chat",
-        element: <ChatPage />,
-      },
-      {
-        path: ":app/_chat",
-        element: <ChatPage />,
-      },
-      {
-        path: "_label",
-        element: <LabelPage />,
-      },
-      {
-        path: ":app/_label",
-        element: <LabelPage />,
-      },
-      {
-        path: "tags/*",
-        element: <HomePage />,
-      },
-      {
-        path: ":app/tags/*",
-        element: <HomePage />,
-      },
-      {
-        path: ":app",
-        element: <HomePage />,
-      },
-      {
-        index: true,
-        element: <HomePage />,
-      },
+      { index: true, element: <HomePage /> },
+      { path: "references", element: <Navigate to="/" replace /> },
     ],
   },
 ]);
 
-const theme = createTheme({
-  typography: {
-    fontSize: 16,
-  },
-  palette: {
-    background: {
-      default: "#ffffff",
-      paper: "#ffffff",
-    },
-  },
-});
+const theme = createTheme();
 
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <RouterProvider router={router} />
-      <Footer />
     </ThemeProvider>
   );
 }

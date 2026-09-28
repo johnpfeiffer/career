@@ -1,0 +1,76 @@
+{
+  "id": "general",
+  "label": "General",
+  "title": "General career development",
+  "description": "Explore broad capability progressions from the example career graphic. These stages are illustrative across roles.",
+  "levels": [
+    { "id": "stage-1", "label": "Stage 1", "shortLabel": "1" },
+    { "id": "stage-2", "label": "Stage 2", "shortLabel": "2" },
+    { "id": "stage-3", "label": "Stage 3", "shortLabel": "3" },
+    { "id": "stage-4", "label": "Stage 4", "shortLabel": "4" },
+    { "id": "stage-5", "label": "Stage 5", "shortLabel": "5" }
+  ],
+  "defaultProfile": { "autonomy": 3, "general-execution": 4, "craft": 3, "scope": 2, "people": 3, "impact": 3 },
+  "axes": [
+    {
+      "id": "autonomy", "label": "Autonomy", "description": "How independently someone can frame and carry work forward.",
+      "levels": [
+        { "label": "Follows", "summary": "Follows clear direction to complete bounded work.", "sourceRefs": ["general-graphic"] },
+        { "label": "Collaborates", "summary": "Collaborates with others to clarify and complete work.", "sourceRefs": ["general-graphic"] },
+        { "label": "Self-Directed", "summary": "Plans and completes work with limited guidance.", "sourceRefs": ["general-graphic"] },
+        { "label": "Empowered", "summary": "Sets a direction and makes sound decisions in a wider area.", "sourceRefs": ["general-graphic"] },
+        { "label": "Visionary", "summary": "Shapes a long-range direction that others can follow.", "sourceRefs": ["general-graphic"] }
+      ]
+    },
+    {
+      "id": "general-execution", "label": "Execution", "description": "How work moves from contribution to systemic improvement.",
+      "levels": [
+        { "label": "Contributes", "summary": "Contributes to assigned work and shared deliverables.", "sourceRefs": ["general-graphic"] },
+        { "label": "Performs", "summary": "Performs the work reliably within an agreed scope.", "sourceRefs": ["general-graphic"] },
+        { "label": "Owns", "summary": "Owns outcomes for a piece of work from start to finish.", "sourceRefs": ["general-graphic"] },
+        { "label": "Improves", "summary": "Improves the way a team delivers results.", "sourceRefs": ["general-graphic"] },
+        { "label": "Revolutionizes", "summary": "Changes a system of work to achieve substantially better outcomes.", "sourceRefs": ["general-graphic"] }
+      ]
+    },
+    {
+      "id": "craft", "label": "Craft", "description": "Depth of practice and ability to advance a discipline.",
+      "levels": [
+        { "label": "Foundational", "summary": "Builds foundational knowledge and practices the basics.", "sourceRefs": ["general-graphic"] },
+        { "label": "Proficient", "summary": "Applies the craft competently in familiar situations.", "sourceRefs": ["general-graphic"] },
+        { "label": "Advanced", "summary": "Handles complex work and explains tradeoffs to others.", "sourceRefs": ["general-graphic"] },
+        { "label": "Expert", "summary": "Provides expert guidance on difficult problems in the discipline.", "sourceRefs": ["general-graphic"] },
+        { "label": "Pioneers", "summary": "Pioneers methods or approaches that extend the discipline.", "sourceRefs": ["general-graphic"] }
+      ]
+    },
+    {
+      "id": "scope", "label": "Scope of Influence", "description": "The breadth of people and work affected by decisions.",
+      "levels": [
+        { "label": "Self", "summary": "Focuses on personal work and immediate learning.", "sourceRefs": ["general-graphic"] },
+        { "label": "Team", "summary": "Influences the work and outcomes of one team.", "sourceRefs": ["general-graphic"] },
+        { "label": "Multi-team", "summary": "Coordinates or improves work across several teams.", "sourceRefs": ["general-graphic"] },
+        { "label": "Company", "summary": "Shapes decisions or practices across a company.", "sourceRefs": ["general-graphic"] },
+        { "label": "Industry", "summary": "Contributes ideas or practices with industry reach.", "sourceRefs": ["general-graphic"] }
+      ]
+    },
+    {
+      "id": "people", "label": "People", "description": "How someone learns with, supports, and leads other people.",
+      "levels": [
+        { "label": "Learns", "summary": "Learns from peers, mentors, and feedback.", "sourceRefs": ["general-graphic"] },
+        { "label": "Supports", "summary": "Supports teammates and helps shared work succeed.", "sourceRefs": ["general-graphic"] },
+        { "label": "Mentors", "summary": "Mentors others and shares useful experience.", "sourceRefs": ["general-graphic"] },
+        { "label": "Coordinates", "summary": "Coordinates people across work and resolves dependencies.", "sourceRefs": ["general-graphic"] },
+        { "label": "Manages", "summary": "Manages people or organizations toward sustained results.", "sourceRefs": ["general-graphic"] }
+      ]
+    },
+    {
+      "id": "impact", "label": "Impact", "description": "How broadly and deliberately work creates value.",
+      "levels": [
+        { "label": "Considers", "summary": "Considers the effect of individual decisions.", "sourceRefs": ["general-graphic"] },
+        { "label": "Comprehends", "summary": "Comprehends how work contributes to larger goals.", "sourceRefs": ["general-graphic"] },
+        { "label": "Organizes", "summary": "Organizes work to achieve clear outcomes.", "sourceRefs": ["general-graphic"] },
+        { "label": "Proactive", "summary": "Proactively identifies opportunities for wider impact.", "sourceRefs": ["general-graphic"] },
+        { "label": "Strategizes", "summary": "Strategizes across areas to create lasting value.", "sourceRefs": ["general-graphic"] }
+      ]
+    }
+  ]
+}

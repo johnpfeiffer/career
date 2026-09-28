@@ -1,0 +1,118 @@
+{
+  "title": "Engineering career ladder",
+  "levels": [
+    { "id": "engineer-1", "label": "Engineer I", "shortLabel": "I" },
+    { "id": "engineer-2", "label": "Engineer II", "shortLabel": "II" },
+    { "id": "mid-level", "label": "Mid Level", "shortLabel": "Mid" },
+    { "id": "senior-1", "label": "Senior Engineer I", "shortLabel": "Senior" },
+    { "id": "staff", "label": "Staff Engineer", "shortLabel": "Staff" },
+    { "id": "principal", "label": "Principal Engineer I", "shortLabel": "Principal" }
+  ],
+  "sources": [
+    {
+      "id": "general-graphic",
+      "label": "General career progression",
+      "description": "The six progressions now written in KERNEL/requirements-v1.md."
+    },
+    {
+      "id": "engineering",
+      "label": "Draft engineering ladder",
+      "description": "The five core competencies in KERNEL/draft-engineer-ladder.md, shown inline on the Software Engineer page."
+    },
+    {
+      "id": "advanced",
+      "label": "Senior and Beyond",
+      "description": "Earlier derived context for staff and principal expectations; the original source is not in the current KERNEL checkout."
+    },
+    {
+      "id": "manager",
+      "label": "Engineering Manager Ladder",
+      "description": "Earlier derived manager expectations; the original source is not in the current KERNEL checkout."
+    },
+    {
+      "id": "dropbox-ic4",
+      "label": "Dropbox IC4 Software Engineer",
+      "href": "https://dropbox.github.io/dbx-career-framework/ic4_software_engineer.html",
+      "description": "A public comparison for autonomous team impact, collaboration, and craft."
+    },
+    {
+      "id": "dropbox-ic5",
+      "label": "Dropbox IC5 Staff Software Engineer",
+      "href": "https://dropbox.github.io/dbx-career-framework/ic5_staff_software_engineer.html",
+      "description": "A public comparison for staff level scope and influence."
+    },
+    {
+      "id": "blog",
+      "label": "Career Development and Software Engineering Roles",
+      "href": "https://blog.john-pfeiffer.com/career-development-and-software-engineering-roles/",
+      "description": "Context on engineering career levels and development conversations."
+    }
+  ],
+  "axes": [
+    {
+      "id": "execution",
+      "label": "Execution",
+      "description": "Plan, build, and deliver work with increasing scope and independence.",
+      "levels": [
+        { "summary": "Write code with assistance and fix bugs identified by others.", "sourceRefs": ["engineering"] },
+        { "summary": "Deliver feature level code and contribute to milestones and production fixes.", "sourceRefs": ["engineering"] },
+        { "summary": "Implement projects independently, cover changes with tests, and communicate delivery status.", "sourceRefs": ["engineering"] },
+        { "summary": "Identify project issues, plan milestones, and deliver consistently across a team.", "sourceRefs": ["engineering", "dropbox-ic4"] },
+        { "summary": "Lead complex initiatives across teams and resolve the most consequential delivery problems.", "sourceRefs": ["advanced", "dropbox-ic5"] },
+        { "summary": "Align delivery of major technical efforts with company goals and industry impact.", "sourceRefs": ["advanced"] }
+      ]
+    },
+    {
+      "id": "best-practices",
+      "label": "Engineering Best Practices",
+      "description": "Improve quality, architecture, operations, and the engineering system around the work.",
+      "levels": [
+        { "summary": "Learn and follow team coding, testing, and architecture practices.", "sourceRefs": ["engineering"] },
+        { "summary": "Apply team practices in code, tests, infrastructure, and approved designs.", "sourceRefs": ["engineering"] },
+        { "summary": "Encourage sound practices in reviews and document new technical debt.", "sourceRefs": ["engineering"] },
+        { "summary": "Identify process and architecture improvements and contribute proposals to review.", "sourceRefs": ["engineering"] },
+        { "summary": "Create reusable tools and playbooks while improving practices across adjacent teams.", "sourceRefs": ["advanced", "dropbox-ic5"] },
+        { "summary": "Steer architecture and spread effective engineering practices across the organization.", "sourceRefs": ["advanced"] }
+      ]
+    },
+    {
+      "id": "customer-focus",
+      "label": "Customer Focus",
+      "description": "Connect engineering choices to customer needs and measurable business outcomes.",
+      "levels": [
+        { "summary": "Learn how assigned work connects to customer problems and service ownership.", "sourceRefs": ["engineering"] },
+        { "summary": "Ship features that solve customer problems and communicate on call status.", "sourceRefs": ["engineering"] },
+        { "summary": "Use customer feedback and analytics to shape feature delivery.", "sourceRefs": ["engineering"] },
+        { "summary": "Ask why a feature matters and proactively respond to stakeholder needs.", "sourceRefs": ["engineering", "dropbox-ic4"] },
+        { "summary": "Clarify product roadmaps and translate customer needs into work across teams.", "sourceRefs": ["advanced", "dropbox-ic5"] },
+        { "summary": "Shape organization wide technical direction around significant customer and business outcomes.", "sourceRefs": ["advanced"] }
+      ]
+    },
+    {
+      "id": "leadership",
+      "label": "Leadership",
+      "description": "Help others make decisions, grow, and deliver together without requiring management authority.",
+      "levels": [
+        { "summary": "Understand team roles, ask useful questions, and own individual commitments.", "sourceRefs": ["engineering"] },
+        { "summary": "Demonstrate accountability for individual work and suggest improvements.", "sourceRefs": ["engineering"] },
+        { "summary": "Own project results, lead feature discussions, and surface tradeoffs.", "sourceRefs": ["engineering"] },
+        { "summary": "Model team accountability, lead technical choices, and help others unblock work.", "sourceRefs": ["engineering", "dropbox-ic4"] },
+        { "summary": "Influence decisions across teams, mentor engineers, and create leverage for other contributors.", "sourceRefs": ["advanced", "dropbox-ic5"] },
+        { "summary": "Lead technical direction across the engineering organization and develop its culture.", "sourceRefs": ["advanced"] }
+      ]
+    },
+    {
+      "id": "vision-strategy",
+      "label": "Vision and Strategy",
+      "description": "See the longer horizon, connect work to goals, and guide technical choices.",
+      "levels": [
+        { "summary": "Seek to understand the team's vision and strategy.", "sourceRefs": ["engineering"] },
+        { "summary": "Follow team strategy and learn the department's direction.", "sourceRefs": ["engineering"] },
+        { "summary": "Design a complete feature area and test its technical feasibility.", "sourceRefs": ["engineering"] },
+        { "summary": "Identify gaps in team strategy and propose a sound path forward.", "sourceRefs": ["engineering", "dropbox-ic4"] },
+        { "summary": "Contribute to a long term technology roadmap across teams and manage technical debt deliberately.", "sourceRefs": ["advanced", "dropbox-ic5"] },
+        { "summary": "Provide technical vision and steer the company's overall architecture.", "sourceRefs": ["advanced"] }
+      ]
+    }
+  ]
+}

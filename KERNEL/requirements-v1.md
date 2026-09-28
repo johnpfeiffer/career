@@ -20,6 +20,20 @@ Classic levels are junior, mid level, senior, (sometimes senior II), staff, prin
 
 My blog post on the subject: https://blog.john-pfeiffer.com/career-development-and-software-engineering-roles/ also has categories and SE1 through SE5
 
+"General" has six radial progressions:
+
+| Capability | 1 (center) | 2 | 3 | 4 | 5 (outer edge) |
+| --- | --- | --- | --- | --- | --- |
+| Autonomy | Follows | Collaborates | Self-Directed | Empowered | Visionary |
+| Execution | Contributes | Performs | Owns | Improves | Revolutionizes |
+| Craft | Foundational | Proficient | Advanced | Expert | Pioneers |
+| Scope of Influence | Self | Team | Multi-team | Company | Industry |
+| People | Learns | Supports | Mentors | Coordinates | Manages |
+| Impact | Considers | Comprehends | Organizes | Proactive | Strategizes |
+
+The app's General view adds short explanatory sentences to these labels.
+
+
 ## Details
 
 Possible Categories:
@@ -41,5 +55,6 @@ For now the landing page should have a title, lead with the interactive spider g
 Below it should be a summary, then a table 
 
 (use the materials from the online and source ladders .md to populate the JSON which power the graph and table)
+
 
 
