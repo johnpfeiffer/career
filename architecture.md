@@ -13,17 +13,18 @@ flowchart LR
     D --> L["models/ladder.ts: view, profile, and detail data"]
     J --> L
     R["references.json: career links"] --> L
+    W["Hosting middleware: /career routes to this app"] --> V
     L --> V["React: view menu, graph, summary, inline ladder accordions, references"]
     V <--> S["Browser localStorage: selected view and per-view profiles"]
 ```
 
-The graph and summary use the same model functions. Every axis has an expectation at every level, satisfying `INV-001`: General has six axes and five levels, Software Engineer has five axes and six levels, and Engineering Manager has three axes and five levels. The Software Engineer capability area embeds four-level competency tables from the cleaned draft, grouped into collapsed accordions. It shows the selected profile's summary even for Staff and Principal, which lie beyond that draft matrix. `App.tsx` owns routing, the view menu, and the default MUI light theme; views stay in `components/`. The former `/references` route redirects to the landing page.
+The graph and summary use the same model functions. Every axis has an expectation at every level, satisfying `INV-001`: General has six axes and five levels, Software Engineer has five axes and six levels, and Engineering Manager has three axes and five levels. The Software Engineer capability area embeds four-level competency tables from the cleaned draft, grouped into collapsed accordions. It shows the selected profile's summary even for Staff and Principal, which lie beyond that draft matrix. `App.tsx` owns routing, the view menu, and the default MUI light theme; views stay in `components/`. The router accepts the root path for local development and an optional first `:app` segment for hosting at `/career`. Its navigation retains that segment. The former `/references` route redirects to the landing page within the same path prefix.
 
 ## User journey
 
 ```mermaid
 flowchart TD
-    A["Open landing page"] --> B["Choose General, Software Engineer, or Engineering Manager"]
+    A["Open / locally or /career when hosted"] --> B["Choose General, Software Engineer, or Engineering Manager"]
     B --> C["See that view's example spider graph"]
     C --> D["Select capability and read current and next levels"]
     D --> E["Change example level"]

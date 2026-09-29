@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AppBar, Box, Container, CssBaseline, FormControl, InputLabel, MenuItem, Select, ThemeProvider, Toolbar, Typography, createTheme } from "@mui/material";
-import { Link, Navigate, Outlet, RouterProvider, createBrowserRouter, useNavigate } from "react-router-dom";
+import { Link, Navigate, Outlet, RouterProvider, createBrowserRouter, useNavigate, useParams } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import { careerViews, type ViewId } from "./models/ladder";
 
@@ -14,6 +14,8 @@ function readViewId(): ViewId {
 function Layout() {
   const [viewId, setViewId] = useState<ViewId>(readViewId);
   const navigate = useNavigate();
+  const { app = "" } = useParams();
+  const homePath = app ? `/${app}` : "/";
 
   useEffect(() => { localStorage.setItem(viewStorageKey, viewId); }, [viewId]);
 
@@ -22,7 +24,7 @@ function Layout() {
       <AppBar position="static" color="transparent" elevation={0} sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Container maxWidth="lg">
           <Toolbar disableGutters sx={{ gap: 2 }}>
-            <Typography variant="subtitle1" component={Link} to="/" sx={{ color: "text.primary", textDecoration: "none", fontWeight: 600, flexGrow: 1 }}>
+            <Typography variant="subtitle1" component={Link} to={homePath} sx={{ color: "text.primary", textDecoration: "none", fontWeight: 600, flexGrow: 1 }}>
               Career Coach
             </Typography>
             <FormControl size="small" sx={{ minWidth: { xs: 165, sm: 210 } }}>
@@ -31,7 +33,7 @@ function Layout() {
                 labelId="view-select-label"
                 value={viewId}
                 label="View"
-                onChange={(event) => { setViewId(event.target.value as ViewId); navigate("/"); }}
+                onChange={(event) => { setViewId(event.target.value as ViewId); navigate(homePath); }}
               >
                 {careerViews.map((view) => <MenuItem key={view.id} value={view.id}>{view.label}</MenuItem>)}
               </Select>
@@ -56,6 +58,13 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: "references", element: <Navigate to="/" replace /> },
+      {
+        path: ":app",
+        children: [
+          { index: true, element: <HomePage /> },
+          { path: "references", element: <Navigate to=".." replace /> },
+        ],
+      },
     ],
   },
 ]);
