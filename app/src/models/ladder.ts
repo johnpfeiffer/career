@@ -1,7 +1,6 @@
 import softwareData from "../data/ladder.json";
 import generalData from "../data/general.json";
 import managerData from "../data/engineering-manager.json";
-import referencesData from "../data/references.json";
 import softwareDetailData from "../data/software-detail.json";
 
 export type ViewId = "general" | "software-engineer" | "engineering-manager";
@@ -13,7 +12,7 @@ export type Axis = {
   levels: Expectation[];
 };
 export type Profile = Record<string, number>;
-export type CareerView = {
+export type Ladder = {
   id: ViewId;
   label: string;
   title: string;
@@ -21,6 +20,8 @@ export type CareerView = {
   levels: { id: string; label: string; shortLabel: string }[];
   defaultProfile: Profile;
   axes: Axis[];
+  references: { label: string; href: string }[];
+  details?: SoftwareDetail;
 };
 export type DetailRow = { label: string; levels: (string | null)[] };
 export type DetailSection = { axisId: string; title: string; rows: DetailRow[]; notes: string[] };
@@ -33,37 +34,27 @@ export type SoftwareDetail = {
   parkingLot: { label: string; text: string }[];
 };
 
-const generalView: CareerView = { ...generalData, id: "general" };
-const softwareView: CareerView = {
+const generalView: Ladder = { ...generalData, id: "general" };
+const softwareView: Ladder = {
   ...softwareData,
   id: "software-engineer",
-  label: "Software Engineer",
-  title: "Software engineer career ladder",
-  description: "Explore five engineering capabilities from Engineer I to Principal Engineer I.",
-  defaultProfile: {
-    execution: 4,
-    "best-practices": 4,
-    "customer-focus": 3,
-    leadership: 3,
-    "vision-strategy": 2,
-  },
+  details: softwareDetailData,
 };
-const managerView: CareerView = { ...managerData, id: "engineering-manager" };
+const managerView: Ladder = { ...managerData, id: "engineering-manager" };
 
-export const careerViews: CareerView[] = [generalView, softwareView, managerView];
+export const ladders: Ladder[] = [generalView, softwareView, managerView];
 export const sources = softwareData.sources;
-export const careerReferences = referencesData;
 export const softwareDetail: SoftwareDetail = softwareDetailData;
 
-export function getCareerView(id: ViewId): CareerView {
-  return careerViews.find((view) => view.id === id) ?? generalView;
+export function getLadder(id: ViewId): Ladder {
+  return ladders.find((view) => view.id === id) ?? generalView;
 }
 
-export function clampLevel(view: CareerView, value: number): number {
+export function clampLevel(view: Ladder, value: number): number {
   return Math.min(view.levels.length, Math.max(1, Math.round(value)));
 }
 
-export function normalizeProfile(view: CareerView, value: unknown): Profile {
+export function normalizeProfile(view: Ladder, value: unknown): Profile {
   const saved = value && typeof value === "object" ? value as Record<string, unknown> : {};
   return Object.fromEntries(view.axes.map((axis) => {
     const next = saved[axis.id];
@@ -73,20 +64,20 @@ export function normalizeProfile(view: CareerView, value: unknown): Profile {
   }));
 }
 
-export function getExpectation(view: CareerView, axis: Axis, level: number): Expectation {
+export function getExpectation(view: Ladder, axis: Axis, level: number): Expectation {
   return axis.levels[clampLevel(view, level) - 1];
 }
 
-export function getLevelLabel(view: CareerView, axis: Axis, level: number): string {
+export function getLevelLabel(view: Ladder, axis: Axis, level: number): string {
   return getExpectation(view, axis, level).label ?? view.levels[clampLevel(view, level) - 1].label;
 }
 
-export function getNextStep(view: CareerView, axis: Axis, level: number): Expectation | null {
+export function getNextStep(view: Ladder, axis: Axis, level: number): Expectation | null {
   const current = clampLevel(view, level);
   return current < view.levels.length ? axis.levels[current] : null;
 }
 
-export function getSummary(view: CareerView, profile: Profile) {
+export function getSummary(view: Ladder, profile: Profile) {
   const entries = view.axes.map((axis) => ({ axis, level: clampLevel(view, profile[axis.id]) }));
   const max = Math.max(...entries.map((entry) => entry.level));
   const min = Math.min(...entries.map((entry) => entry.level));
@@ -94,4 +85,23 @@ export function getSummary(view: CareerView, profile: Profile) {
     highest: entries.filter((entry) => entry.level === max).map((entry) => entry.axis.label),
     focus: entries.filter((entry) => entry.level === min).map((entry) => entry.axis.label),
   };
+}
+
+export function getCapabilityRows(ladder: Ladder, axis: Axis): DetailRow[] {
+  const section = ladder.details?.sections.find((item) => item.axisId === axis.id);
+  return [
+    { label: "Level", levels: ladder.levels.map((_, index) => getLevelLabel(ladder, axis, index + 1)) },
+    { label: "Expectation", levels: axis.levels.map((level) => level.summary) },
+    ...(section?.rows.map((row) => ({
+      ...row,
+      levels: ladder.levels.map((_, index) => row.levels[index] ?? null),
+    })) ?? []),
+  ];
+}
+
+// Project a pointer onto one axis; movement sideways cannot change the chosen axis.
+export function getLevelAtPoint(ladder: Ladder, axisIndex: number, point: { x: number; y: number }, center: { x: number; y: number }, radius: number): number {
+  const angle = -Math.PI / 2 + axisIndex * Math.PI * 2 / ladder.axes.length;
+  const distance = (point.x - center.x) * Math.cos(angle) + (point.y - center.y) * Math.sin(angle);
+  return clampLevel(ladder, distance / radius * ladder.levels.length);
 }

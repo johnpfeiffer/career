@@ -1,5 +1,5 @@
 {
-  "title": "Engineering career ladder",
+  "title": "Software engineer career ladder",
   "levels": [
     { "id": "engineer-1", "label": "Engineer I", "shortLabel": "I" },
     { "id": "engineer-2", "label": "Engineer II", "shortLabel": "II" },
@@ -113,6 +113,34 @@
         { "summary": "Contribute to a long term technology roadmap across teams and manage technical debt deliberately.", "sourceRefs": ["advanced", "dropbox-ic5"] },
         { "summary": "Provide technical vision and steer the company's overall architecture.", "sourceRefs": ["advanced"] }
       ]
+    }
+  ],
+  "id": "software-engineer",
+  "label": "Software Engineer",
+  "description": "Explore five engineering capabilities from Engineer I to Principal Engineer I.",
+  "defaultProfile": {
+    "execution": 4,
+    "best-practices": 4,
+    "customer-focus": 3,
+    "leadership": 3,
+    "vision-strategy": 2
+  },
+  "references": [
+    {
+      "label": "What are career levels and ladders?",
+      "href": "https://www.levels.fyi/blog/what-are-career-levels-ladders.html"
+    },
+    {
+      "label": "SE Radio 515: Becoming a Senior Engineer",
+      "href": "https://se-radio.net/2022/06/episode-515-swizec-teller-on-becoming-a-senior-engineer/"
+    },
+    {
+      "label": "What is a Principal Engineer at Amazon?",
+      "href": "https://newsletter.pragmaticengineer.com/p/what-is-a-principal-engineer-at-amazon"
+    },
+    {
+      "label": "Getting to Staff Eng",
+      "href": "https://www.youtube.com/watch?v=bOG5GTM_yXs"
     }
   ]
 }

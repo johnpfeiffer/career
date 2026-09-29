@@ -72,5 +72,23 @@
         { "label": "Strategizes", "summary": "Strategizes across areas to create lasting value.", "sourceRefs": ["general-graphic"] }
       ]
     }
+  ],
+  "references": [
+    {
+      "label": "Dropbox career framework",
+      "href": "https://dropbox.github.io/dbx-career-framework/"
+    },
+    {
+      "label": "Engineering levels: our glass level is full",
+      "href": "https://www.frontendhappyhour.com/episodes/engineering-levels-our-glass-level-is-full"
+    },
+    {
+      "label": "Building autonomous teams and engineering career ladders",
+      "href": "https://sfelc.com/podcasts/building-autonomous-teams-and-engineering-career-ladders-sri-viswanath"
+    },
+    {
+      "label": "How promotions really work in tech",
+      "href": "https://www.frontendhappyhour.com/episodes/how-promotions-really-work-in-tech"
+    }
   ]
 }

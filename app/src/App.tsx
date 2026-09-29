@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { AppBar, Box, Container, CssBaseline, FormControl, InputLabel, MenuItem, Select, ThemeProvider, Toolbar, Typography, createTheme } from "@mui/material";
+import { AppBar, Container, CssBaseline, FormControl, InputLabel, MenuItem, Select, ThemeProvider, Toolbar, Typography, createTheme } from "@mui/material";
 import { Link, Navigate, Outlet, RouterProvider, createBrowserRouter, useNavigate, useParams } from "react-router-dom";
 import HomePage from "./components/HomePage";
-import { careerViews, type ViewId } from "./models/ladder";
+import Footer from "./components/Footer";
+import { ladders, type ViewId } from "./models/ladder";
 
 const viewStorageKey = "career-coach-view-v1";
 
 function readViewId(): ViewId {
   const saved = localStorage.getItem(viewStorageKey);
-  return careerViews.some((view) => view.id === saved) ? saved as ViewId : "general";
+  return ladders.some((view) => view.id === saved) ? saved as ViewId : "general";
 }
 
 function Layout() {
@@ -35,18 +36,14 @@ function Layout() {
                 label="View"
                 onChange={(event) => { setViewId(event.target.value as ViewId); navigate(homePath); }}
               >
-                {careerViews.map((view) => <MenuItem key={view.id} value={view.id}>{view.label}</MenuItem>)}
+                {ladders.map((view) => <MenuItem key={view.id} value={view.id}>{view.label}</MenuItem>)}
               </Select>
             </FormControl>
           </Toolbar>
         </Container>
       </AppBar>
       <Outlet context={{ viewId }} />
-      <Box component="footer" sx={{ borderTop: 1, borderColor: "divider", py: 3, mt: 6 }}>
-        <Container maxWidth="lg">
-          <Typography variant="body2" color="text.secondary">Engineering career development reference</Typography>
-        </Container>
-      </Box>
+      <Footer />
     </>
   );
 }

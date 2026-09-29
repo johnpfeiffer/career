@@ -42,5 +42,27 @@
         { "summary": "Manage multiple strategies and establish a framework for tracking success and alignment across the department.", "sourceRefs": ["manager"] }
       ]
     }
+  ],
+  "references": [
+    {
+      "label": "Sourcegraph leveling guide",
+      "href": "https://github.com/sourcegraph/handbook/blob/main/content/benefits-pay-perks/pay-expenses/compensation/leveling-guide.md"
+    },
+    {
+      "label": "Frontline manager at Meta to senior",
+      "href": "https://www.developing.dev/p/frontline-manager-at-meta-to-senior"
+    },
+    {
+      "label": "Building managers: leading from the back, leading from the front",
+      "href": "https://www.effectiveem.com/building-managers-leading-from-the-back-leading-from-the-front/"
+    },
+    {
+      "label": "Conscious career growth, part 2",
+      "href": "https://sfelc.com/podcasts/conscious-career-growth-part-2"
+    },
+    {
+      "label": "Software engineering leadership",
+      "href": "https://ericbrooke.blog/2018/09/16/software-engineering-leadership/"
+    }
   ]
 }
