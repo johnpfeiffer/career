@@ -1,6 +1,6 @@
 # Engineering Ladder
 
-## Page 1
+## Overview
 
 The performance characteristics described can be useful in conversations with your manager around quarterly goal setting.
 The document is not meant to be used as a checklist for promotion. Evaluate levels and their performance characteristics holistically.
@@ -8,9 +8,7 @@ The document is not meant to be used as a checklist for promotion. Evaluate leve
 It is a path from "learning" to "reactive" to "engaged" to "proactive"
 Does this page not take you far enough in your engineering career?
 
-## Page 2
-
-Advanced engineer patterns emerge (Kent Beck):
+Advanced engineer patterns emerge (source: Kent Beck):
 
 Longevity/diversity. Pick projects with a short Time to Production Feedback.
 Structure existing projects to reduce time to feedback. Once youʼve learned your lessons, move on to a contrasting project.
@@ -21,6 +19,8 @@ Mentored/self-directed. Build and maintain relationships with engineers you admi
 Trust your curiosity as a compass pointing to your future growth.
 
 Urgency/slack. Work hard on your main responsibility, but take time to learn when thatʼs the best use of marginal effort. Youʼre worth it.
+
+## Levels
 
 Core Competencies
 
