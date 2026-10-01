@@ -12,26 +12,41 @@ export type Axis = {
   levels: Expectation[];
 };
 export type Profile = Record<string, number>;
+export type Source = { id: string; label: string; description: string; href?: string };
 export type Ladder = {
   id: ViewId;
   label: string;
   title: string;
   description: string;
-  levels: { id: string; label: string; shortLabel: string }[];
+  levels: { id: string; label: string; shortLabel: string; note?: string; noteLabel?: string }[];
+  profileVersion?: number;
   defaultProfile: Profile;
   axes: Axis[];
   references: { label: string; href: string }[];
-  details?: SoftwareDetail;
+  sources?: Source[];
+  details?: LadderDetails;
 };
 export type DetailRow = { label: string; levels: (string | null)[] };
 export type DetailSection = { axisId: string; title: string; rows: DetailRow[]; notes: string[] };
-export type SoftwareDetail = {
+export type ContentBlock = {
+  kind: string;
+  text?: string;
+  ordered?: boolean;
+  items?: string[];
+  headers?: string[];
+  rows?: string[][];
+};
+export type DetailArticle = { title: string; blocks: ContentBlock[] };
+export type LadderDetails = {
   levels: string[];
-  guide: string[];
-  patterns: { label: string; text: string }[];
+  guide?: string[];
+  patterns?: { label: string; text: string }[];
+  patternsTitle?: string;
   sections: DetailSection[];
-  parkingLotIntro: string;
-  parkingLot: { label: string; text: string }[];
+  parkingLotIntro?: string;
+  parkingLot?: { label: string; text: string }[];
+  introduction?: DetailArticle;
+  articles?: DetailArticle[];
 };
 
 const generalView: Ladder = { ...generalData, id: "general" };
@@ -43,11 +58,15 @@ const softwareView: Ladder = {
 const managerView: Ladder = { ...managerData, id: "engineering-manager" };
 
 export const ladders: Ladder[] = [generalView, softwareView, managerView];
-export const sources = softwareData.sources;
-export const softwareDetail: SoftwareDetail = softwareDetailData;
+export const sources: Source[] = ladders.flatMap((ladder) => ladder.sources ?? []);
+export const softwareDetail = softwareDetailData;
 
 export function getLadder(id: ViewId): Ladder {
   return ladders.find((view) => view.id === id) ?? generalView;
+}
+
+export function getProfileStorageKey(ladder: Ladder): string {
+  return `career-coach-profile-v${ladder.profileVersion ?? 2}-${ladder.id}`;
 }
 
 export function clampLevel(view: Ladder, value: number): number {

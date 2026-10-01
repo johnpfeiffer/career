@@ -1,8 +1,8 @@
-# Milestone 2 black-box UAT
+# Career Coach black-box UAT
 
 Derived from immutable `KERNEL/requirements-v1.md`, `KERNEL/TEST-PLAN.md`, and `KERNEL/INVARIANTS.md`. The kernel wins if this file differs. Test through rendered UI and browser controls; use fresh browser sessions and record each view's defaults before editing. Content is checked against the kernel and applicable source data. No kernel files are edited.
 
-Keep automation small: seven browser workflows cover multiple cases, alongside the existing model tests. Avoid DOM snapshots and styling checks except the explicitly required selection and italic instruction. Browser tests do not import implementation models. Run shared behavior in all three views where indicated.
+Keep automation small: nine browser workflows cover multiple cases, alongside compiler and model tests. Avoid DOM snapshots and styling checks except the explicitly required selection and italic instruction. Browser tests do not import implementation models. Run shared behavior in all three views where indicated.
 
 ## Happy paths
 
@@ -17,18 +17,20 @@ Keep automation small: seven browser workflows cover multiple cases, alongside t
 | HP-07 | In each view, visit every capability and every offered level. | Every axis has levels (INV-001); titles, scale, labels, explanations, and tables belong to the correct view. General's 30 labels match the kernel. Increasing levels move outward. | Pass |
 | HP-08 | Switch views and follow references and footer links. | Exact per-view URLs match the kernel (4 General, 4 Software Engineer, 5 Engineering Manager). Footer reads “Built by John Pfeiffer,” links to the copied component's LinkedIn profile and this repository on GitHub, with accessible icon names. | Pass |
 | HP-09 | Edit all three views; switch back; reload Software Engineer; reset; revisit other views and reload. | Active view and separate profiles persist. Reset restores all active-view defaults, persists after reload, and leaves other views' edits intact. | Pass |
+| HP-10 | Open the manager introduction, five capability matrices, and all five supporting sections; follow an embedded source. | M3–M8 and Results, Technology, Collaboration, People, Vision and Strategy match the completed kernel. All 34 competency rows have six populated cells. Embedded GitLab and timestamped Larson links retain their destinations; proposed synthesis remains visible. | Pass |
 
 ## Edge cases
 
 | ID | Case and actions | Expected result | Status |
 | --- | --- | --- | --- |
 | EC-01 | Click between levels nearer one position; click empty space away from axes; click a label. | Axis click snaps to nearest valid level; empty space preserves values; label selects without editing. | Pass |
-| EC-02 | Set Software Engineer Execution to 6; switch to five-level views and back. | Correct scales and independent saved values; no capability names or expectations leak between views. | Pass |
+| EC-02 | Set Software Engineer Execution to 6; switch to five-level General and six-level Engineering Manager and back. | Correct scales and independent saved values; no capability names or expectations leak between views. | Pass |
 | EC-03 | Move every General capability to minimum/maximum and drag beyond both limits; inspect next-level text. | Dot stays on its axis within valid range; correct endpoint explanation; maximum clearly has no next level. | Pass |
 | EC-04 | Rapidly alternate Autonomy/Execution; finish at 2/5 with all others at 3. | Correct final values, selection, summary, and table; no delayed write to a different axis. | Pass |
 | EC-05 | Drag outside graph, release, return, then adjust another capability. | First drag settles at a valid value and stops; later pointer movement does not resume it; next adjustment works. | Pass |
 | EC-06 | Set all capabilities to the same level. | Both summary lists contain every capability exactly once in stable order, since all are tied. | Pass |
 | EC-07 | Select Software Engineer Staff/Principal; inspect all expanded levels and missing detailed cells. | Correct selected title and available summary; absent detailed content uses “—”, without substituting another level or removing graph levels. | Pass |
+| EC-08 | Seed old five-title manager values and saved General values; load the new manager dataset, adjust Collaboration, and reload. | The new manager ladder starts its example defaults using a new version; General values survive. New manager edits persist without reinterpreting old role positions. | Pass |
 
 ## Deferred Weird Cases
 
@@ -57,3 +59,15 @@ Red/green evidence: the baseline five model tests passed; the revised reference 
 All six kernel file hashes match their values recorded before implementation. The required README and system/user-journey architecture diagrams are updated. The production build emits Vite's bundle-size advisory; compilation and bundling succeed.
 
 Follow-up: removed the browser's rectangular SVG focus outline on dot clicks. A focused browser check reproduced the unwanted outline before the fix, then passed after the fix and confirmed keyboard focus still uses the dot stroke. The five model tests, production build, and diff whitespace check also pass. No additional permanent tests were added for this small style correction.
+
+## Completed manager draft integration
+
+The updated compiler reads the completed manager draft directly and writes the full manager ladder. Graph and routing code required no changes. A generic detail renderer supports optional articles and embedded links; the manager content includes M3–M8, five axes, 34 competency rows, and synthesis qualifications. The software AI row was realigned to its immutable source because the cleaned copy had moved expectations between levels and introduced asynchronous agents/vibe-platform expectations absent from the kernel. This repairs derived content without weakening a validation criterion.
+
+Red/green evidence: the new model checks failed on the old three-axis/five-title manager dataset. Compiler freshness checks failed for the old manager JSON and stale engineer JSON. After generation, all three compiler tests and six model tests pass. Invalid manager matrices are rejected for missing cells, wrong level order, mismatched rows, and empty expectations. All source URLs are retained in generated manager data.
+
+Browser additions check manager context and source navigation, and profile compatibility. An initial exact-header assertion was updated to include the new synthesis qualification. The legacy-profile fixture was corrected to use General's actual `general-execution` storage key. No behavior assertion was removed.
+
+Validated on 2026-10-01: `npm test` — 3 compiler tests, generated-data freshness check, and 6 model tests passed; `npm run test:uat` — 9 Chromium workflows passed in 49.1 seconds; `npm run build` — passed; `git diff --check` — passed. All kernel file hashes, including local historical sources, match the values recorded before implementation. Narrow-screen/touch, unavailable-storage, and zoom cases remain deferred. Vite continues to emit its existing bundle-size advisory; the final bundle is about 610 kB minified / 189 kB gzip.
+
+Desktop visual review at 1440 × 1000 confirmed the manager graph, M3–M8 slider marks, readable wrapped competency cells, selected-column shading, and visible synthesis labels. The page has no horizontal overflow at that size. A local Vite preview is available on port 5173 for review.

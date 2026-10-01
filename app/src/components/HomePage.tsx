@@ -8,16 +8,12 @@ import RadarChart from "./RadarChart";
 import LadderTable from "./LadderTable";
 import {
   clampLevel, ladders, getLadder, getExpectation, getLevelLabel,
-  getNextStep, getSummary, normalizeProfile, type Ladder, type Profile, type ViewId,
+  getNextStep, getSummary, getProfileStorageKey, normalizeProfile, type Ladder, type Profile, type ViewId,
 } from "../models/ladder";
-
-function profileStorageKey(viewId: ViewId) {
-  return `career-coach-profile-v2-${viewId}`;
-}
 
 function readProfile(view: Ladder): Profile {
   try {
-    const saved = localStorage.getItem(profileStorageKey(view.id))
+    const saved = localStorage.getItem(getProfileStorageKey(view))
       ?? (view.id === "software-engineer" ? localStorage.getItem("career-coach-profile-v1") : null);
     return normalizeProfile(view, JSON.parse(saved ?? "null"));
   } catch {
@@ -44,7 +40,7 @@ export default function HomePage() {
 
   useEffect(() => {
     for (const item of ladders) {
-      localStorage.setItem(profileStorageKey(item.id), JSON.stringify(profiles[item.id]));
+      localStorage.setItem(getProfileStorageKey(item), JSON.stringify(profiles[item.id]));
     }
   }, [profiles]);
 
@@ -98,6 +94,9 @@ export default function HomePage() {
             />
             <Typography variant="subtitle2" gutterBottom>At this level</Typography>
             <Typography variant="body1" sx={{ mb: 3 }}>{expectation.summary}</Typography>
+            {view.levels[selectedLevel - 1].note && <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+              {view.levels[selectedLevel - 1].note}
+            </Typography>}
             <Typography variant="subtitle2" gutterBottom>{next ? "Next level" : "At the outer level"}</Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
               {next ? `${next.label ?? view.levels[selectedLevel].label}: ${next.summary}` : "This is the highest level in this example ladder."}

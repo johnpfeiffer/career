@@ -12,6 +12,7 @@ RAW/
 /coverage
 **/test-results/
 **/playwright-report/
+__pycache__/
 
 # next.js
 /.next/
