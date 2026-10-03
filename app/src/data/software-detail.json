@@ -9,6 +9,7 @@
     "The performance characteristics described can be useful in conversations with your manager around quarterly goal setting. The document is not meant to be used as a checklist for promotion. Evaluate levels and their performance characteristics holistically.",
     "The path runs from learning to reactive to engaged to proactive."
   ],
+  "patternsTitle": "Advanced engineer patterns",
   "patterns": [
     {
       "label": "Longevity and diversity",
@@ -204,8 +205,8 @@
         {
           "label": "AI / LLM",
           "levels": [
-            "Learn the organizatin's tools, and foundational concepts such as prompting and hallucination.",
-            "Use the defaults of AI and LLM tools, including IDE support (tab autocomplete), code analysis and explanation, and chat for prompting practice.",
+            "Learn the organization's tools and foundational concepts such as prompting and hallucination.",
+            "Use the defaults of AI and LLM tools, including code autocomplete, code analysis and explanation, and chat for prompting practice.",
             "Integrate LLMs into your workflow beyond code; use them to understand requirements, engineering, product and privacy practices, and domain concepts; recognize and mitigate shortcomings.",
             "Use LLMs for pair programming, code review, refactoring, architecture documentation, and training less experienced team members."
           ]

@@ -11,7 +11,7 @@ const generalLabels: Record<string, string[]> = {
 const views = [
   { name: "General", axes: Object.keys(generalLabels), levels: ["Stage 1", "Stage 2", "Stage 3", "Stage 4", "Stage 5"] },
   { name: "Software Engineer", axes: ["Execution", "Engineering Best Practices", "Customer Focus", "Leadership", "Vision and Strategy"], levels: ["Engineer I", "Engineer II", "Mid Level", "Senior Engineer I", "Staff Engineer", "Principal Engineer I"] },
-  { name: "Engineering Manager", axes: ["Results", "People", "Vision and Strategy"], levels: ["Engineering Manager", "Engineering Manager II", "Senior Engineering Manager", "Principal Engineering Manager", "Director of Engineering"] },
+  { name: "Engineering Manager", axes: ["Results", "Technology", "Collaboration", "People", "Vision and Strategy"], levels: ["M3 Engineering Manager", "M4 Senior Engineering Manager", "M5 Director of Engineering", "M6 Senior Director of Engineering", "M7 Vice President of Engineering", "M8 CTO"] },
 ];
 
 async function chooseView(page: Page, name: string) {
@@ -141,7 +141,10 @@ for (const view of views) test(`${view.name}: every capability and level, select
     const expand = page.getByRole("button", { name: `Full ladder: ${axis}`, exact: true });
     await expand.click();
     const table = page.getByRole("table", { name: `${axis} full ladder`, exact: true });
-    for (const name of view.levels) await expect(table.getByRole("columnheader", { name, exact: true })).toBeVisible();
+    for (const name of view.levels) {
+      const header = view.name === "Engineering Manager" && /^M[78] /.test(name) ? `${name} Proposed synthesis` : name;
+      await expect(table.getByRole("columnheader", { name: header, exact: true })).toBeVisible();
+    }
     const slider = details(page).getByRole("slider");
     await slider.focus();
     await slider.press("Home");
@@ -227,4 +230,54 @@ test("independent profiles, reload, different scales, and active-view reset", as
   await expect(selectedTable(page)).toHaveText(general, { useInnerText: true });
   await chooseView(page, "Engineering Manager");
   await expect(selectedTable(page)).toHaveText(manager, { useInnerText: true });
+});
+
+test("manager guidance, complete competencies, and embedded source links", async ({ page, context }) => {
+  await chooseView(page, "Engineering Manager");
+  await page.getByRole("button", { name: "How to read this draft ladder", exact: true }).click();
+  await expect(page.getByText("Accountability carries forward; daily tasks change.", { exact: true })).toBeVisible();
+  const guideLink = page.getByRole("link", { name: "GitLab career development", exact: true }).first();
+  await expect(guideLink).toHaveAttribute("href", "https://handbook.gitlab.com/handbook/engineering/careers/management/management-career-development/");
+  await context.route(/^https:\/\//, (route) => route.fulfill({ body: "Embedded reference destination" }));
+  const [popup] = await Promise.all([page.waitForEvent("popup"), guideLink.click()]);
+  await expect(popup).toHaveURL("https://handbook.gitlab.com/handbook/engineering/careers/management/management-career-development/");
+  await popup.close();
+  await page.getByRole("button", { name: "Full ladder: Technology", exact: true }).click();
+  const table = page.getByRole("table", { name: "Technology full ladder", exact: true });
+  await expect(table.getByRole("row").filter({ hasText: "AI / LLM — kernel-derived" }))
+    .toContainText("Decide where AI contributes to technology or product strategy");
+  await expect(table.getByRole("cell", { name: "—", exact: true })).toHaveCount(0);
+  await selectAxis(page, "Technology");
+  await details(page).getByRole("slider").press("End");
+  await expect(details(page)).toContainText("M8 CTO");
+  await expect(details(page)).toContainText("Proposed synthesis");
+  await expect(page.getByRole("link", { name: "Larson transcript, 23:50–25:38", exact: true }))
+    .toHaveAttribute("href", "https://www.youtube.com/watch?v=TkA5A7BJF2k&t=1430s");
+  for (const title of ["Levels", "Role essentials", "Distinguishing adjacent roles", "Backlog and parking lot", "Sources and contribution notes"]) {
+    const expand = page.getByRole("button", { name: title, exact: true });
+    await expect(expand).toHaveAttribute("aria-expanded", "false");
+    await expand.click();
+    await expect(page.getByRole("table", { name: `${title} table 1`, exact: true })).toBeVisible();
+    await expand.click();
+  }
+});
+
+test("changed manager titles start a fresh profile while other saved views survive", async ({ page }) => {
+  await expect(graphSlider(page, "Execution")).toBeVisible();
+  await page.evaluate(() => {
+    localStorage.setItem("career-coach-profile-v2-engineering-manager", JSON.stringify({ results: 5, "manager-people": 5, "manager-strategy": 5 }));
+    localStorage.removeItem("career-coach-profile-v3-engineering-manager");
+    localStorage.setItem("career-coach-profile-v2-general", JSON.stringify({ autonomy: 4, "general-execution": 1 }));
+  });
+  await page.reload();
+  await expect(graphSlider(page, "Execution")).toHaveAttribute("aria-valuenow", "1");
+  await chooseView(page, "Engineering Manager");
+  await expect(graphSlider(page, "Results")).toHaveAttribute("aria-valuenow", "2");
+  await expect(graphSlider(page, "People")).toHaveAttribute("aria-valuenow", "2");
+  await expect(graphSlider(page, "Technology")).toHaveAttribute("aria-valuenow", "2");
+  await clickLevel(page, "Collaboration", 6);
+  await page.reload();
+  await expect(graphSlider(page, "Collaboration")).toHaveAttribute("aria-valuenow", "6");
+  await chooseView(page, "General");
+  await expect(graphSlider(page, "Execution")).toHaveAttribute("aria-valuenow", "1");
 });

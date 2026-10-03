@@ -25,11 +25,6 @@
       "description": "Earlier derived context for staff and principal expectations; the original source is not in the current KERNEL checkout."
     },
     {
-      "id": "manager",
-      "label": "Engineering Manager Ladder",
-      "description": "Earlier derived manager expectations; the original source is not in the current KERNEL checkout."
-    },
-    {
       "id": "dropbox-ic4",
       "label": "Dropbox IC4 Software Engineer",
       "href": "https://dropbox.github.io/dbx-career-framework/ic4_software_engineer.html",
