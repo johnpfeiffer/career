@@ -232,6 +232,53 @@ test("independent profiles, reload, different scales, and active-view reset", as
   await expect(selectedTable(page)).toHaveText(manager, { useInnerText: true });
 });
 
+test("two tabs preserve edits across ladders and sync changes to the same ladder", async ({ page, context }) => {
+  await expect(graphSlider(page, "Autonomy")).toBeVisible();
+  const other = await context.newPage();
+  await other.goto("/");
+  await chooseView(other, "Software Engineer");
+  await graphSlider(other, "Execution").press("End");
+
+  await graphSlider(page, "Autonomy").press("Home");
+  await chooseView(page, "Software Engineer");
+  await expect(graphSlider(page, "Execution")).toHaveAttribute("aria-valuenow", "6");
+  await graphSlider(page, "Leadership").press("End");
+  await expect(graphSlider(other, "Leadership")).toHaveAttribute("aria-valuenow", "6");
+
+  await other.reload();
+  await expect(graphSlider(other, "Execution")).toHaveAttribute("aria-valuenow", "6");
+  await expect(graphSlider(other, "Leadership")).toHaveAttribute("aria-valuenow", "6");
+  await chooseView(other, "General");
+  await expect(graphSlider(other, "Autonomy")).toHaveAttribute("aria-valuenow", "1");
+});
+
+for (const failure of ["denied", "full"] as const) {
+  test(`app stays usable when browser storage is ${failure}`, async ({ page }) => {
+    await page.addInitScript((failure) => {
+      if (failure === "denied") {
+        Object.defineProperty(window, "localStorage", {
+          get() { throw new DOMException("Storage access denied", "SecurityError"); },
+        });
+      } else {
+        Storage.prototype.setItem = () => {
+          throw new DOMException("Storage quota exhausted", "QuotaExceededError");
+        };
+      }
+    }, failure);
+    await page.reload();
+    await clickLevel(page, "Autonomy", 5);
+    await expect(page.getByRole("status")).toContainText("may be lost when you reload");
+    await chooseView(page, "Software Engineer");
+    await graphSlider(page, "Execution").press("End");
+    await chooseView(page, "General");
+    await expect(graphSlider(page, "Autonomy")).toHaveAttribute("aria-valuenow", "5");
+    await page.getByRole("button", { name: "Reset to Default" }).click();
+    await expect(graphSlider(page, "Autonomy")).toHaveAttribute("aria-valuenow", "3");
+    await chooseView(page, "Software Engineer");
+    await expect(graphSlider(page, "Execution")).toHaveAttribute("aria-valuenow", "6");
+  });
+}
+
 test("manager guidance, complete competencies, and embedded source links", async ({ page, context }) => {
   await chooseView(page, "Engineering Manager");
   await page.getByRole("button", { name: "How to read this draft ladder", exact: true }).click();

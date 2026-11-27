@@ -17,7 +17,8 @@ flowchart LR
     J --> L
     W["Hosting middleware: /career routes to this app"] --> V
     L --> V["React: view menu, click/drag graph, selected values, full ladders, references, footer"]
-    V <--> S["Browser localStorage: selected view and per-view profiles"]
+    V <--> P["View preference and in-memory profiles"]
+    P <-->|"Save edited profile and receive storage events"| S["Browser localStorage"]
 ```
 
 The `Ladder` model contains titles, ordered levels, growth axes, per-axis expectations, defaults, references, optional competency details, and an optional saved-profile version. JSON supplies content and defaults; the registry attaches the software draft details. Every axis has an expectation at every level, satisfying `INV-001`: General has six axes and five levels, Software Engineer has five axes and six levels, and Engineering Manager has five axes and six levels. `getCapabilityRows` adds all-level labels and summaries to the available competency matrix and pads absent software cells with null, rendered as “—”. `LadderTable.tsx` renders this shared data in collapsed sections.
@@ -26,7 +27,9 @@ The `Ladder` model contains titles, ordered levels, growth axes, per-axis expect
 
 The manager compiler merges M3–M6 and M7–M8 tables by matching competency names and validates all six populated cells across 34 rows. Graph expectations use each capability's first scope row verbatim. The five required manager references come from `KERNEL/requirements-v1.md`; the draft's additional sources remain embedded. `--check` fails on stale generated files, and `npm test` runs compiler tests and this freshness check before model tests.
 
-`HomePage.tsx` controls the active profile and capability selection. Both graph and side slider send an explicit axis ID to the same update handler; normalization and summary logic stay in `models/`. `RadarChart.tsx` transforms browser pointer coordinates into SVG coordinates and captures the pointer for a drag. The model projects movement onto the chosen axis, rounds to a whole level, and clamps to the ladder's bounds. Release, cancellation, and loss of capture end the drag; changing views remounts the graph. The axis label selects without editing, and both the graph and side slider support keyboard level adjustment.
+`HomePage.tsx` controls capability selection. Both graph and side slider send the axis ID to the same profile editor. Normalization and summary logic live in `models/`. `RadarChart.tsx` transforms browser pointer coordinates into SVG coordinates and captures the pointer for a drag. The model projects movement onto the chosen axis, rounds to a whole level, and clamps to the ladder's bounds. Release, cancellation, and loss of capture end the drag. Changing views remounts the graph. The axis label selects without editing, and both the graph and side slider support keyboard level adjustment.
+
+`useProfiles.ts` keeps the session's profiles in memory. Each edit reads the latest saved profile, applies the changed axes, and writes only that ladder's key. Reset applies all default axes to the active ladder. Storage events refresh matching profiles in other tabs. The selected view stays independent per open tab and the last saved selection is used on reload. `careerStorage.ts` guards browser storage reads and writes. If a write fails, the current tab retains the changed axes and includes them in the next save attempt for that ladder.
 
 SVG controls suppress the browser's rectangular focus outline. Keyboard focus uses the dot stroke or label underline; clicking a dot does not draw a rectangle around its axis.
 
@@ -45,7 +48,10 @@ flowchart TD
     G --> I["Read guidance, evidence notes, and embedded career links"]
     I --> J["For managers, compare role responsibilities and M7–M8 synthesis qualifications"]
     F --> H["Reset to Default for the active view; other profiles are preserved"]
+    F --> S{"Browser storage available?"}
+    S -->|"Yes"| T["Save active ladder and refresh other tabs"]
+    S -->|"No"| U["Keep edits in this tab and show a saving notice"]
     F --> B
 ```
 
-The selected view and each view's profile are local to the browser. Switching views restores that view's last example. The graph is a reference for development conversations; its levels are not a promotion checklist.
+The selected view and each view's profile are local to the browser. Switching views restores that view's most recent example. The graph is a reference for development conversations; its levels are not a promotion checklist.

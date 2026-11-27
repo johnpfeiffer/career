@@ -1,24 +1,23 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AppBar, Container, CssBaseline, FormControl, InputLabel, MenuItem, Select, ThemeProvider, Toolbar, Typography, createTheme } from "@mui/material";
 import { Link, Navigate, Outlet, RouterProvider, createBrowserRouter, useNavigate, useParams } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import Footer from "./components/Footer";
-import { ladders, type ViewId } from "./models/ladder";
-
-const viewStorageKey = "career-coach-view-v1";
-
-function readViewId(): ViewId {
-  const saved = localStorage.getItem(viewStorageKey);
-  return ladders.some((view) => view.id === saved) ? saved as ViewId : "general";
-}
+import { useProfiles } from "./hooks/useProfiles";
+import { readViewPreference, saveViewPreference } from "./models/careerStorage";
+import { getLadder, ladders, type ViewId } from "./models/ladder";
 
 function Layout() {
-  const [viewId, setViewId] = useState<ViewId>(readViewId);
+  const [{ viewId, available: viewPreferenceAvailable }, setViewPreference] = useState(readViewPreference);
+  const { profile, updateProfile, profilesAvailable } = useProfiles(getLadder(viewId));
   const navigate = useNavigate();
   const { app = "" } = useParams();
   const homePath = app ? `/${app}` : "/";
 
-  useEffect(() => { localStorage.setItem(viewStorageKey, viewId); }, [viewId]);
+  function changeView(id: ViewId) {
+    setViewPreference({ viewId: id, available: saveViewPreference(id) });
+    navigate(homePath);
+  }
 
   return (
     <>
@@ -34,7 +33,7 @@ function Layout() {
                 labelId="view-select-label"
                 value={viewId}
                 label="View"
-                onChange={(event) => { setViewId(event.target.value as ViewId); navigate(homePath); }}
+                onChange={(event) => changeView(event.target.value as ViewId)}
               >
                 {ladders.map((view) => <MenuItem key={view.id} value={view.id}>{view.label}</MenuItem>)}
               </Select>
@@ -42,7 +41,7 @@ function Layout() {
           </Toolbar>
         </Container>
       </AppBar>
-      <Outlet context={{ viewId }} />
+      <Outlet context={{ viewId, profile, updateProfile, storageUnavailable: !viewPreferenceAvailable || !profilesAvailable }} />
       <Footer />
     </>
   );
