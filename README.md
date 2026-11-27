@@ -24,7 +24,7 @@ npm run test:uat
 npm run build
 ```
 
-`npm test` runs three compiler tests, checks generated JSON freshness, and runs six model tests for levels, sources, profiles, next-level behavior, and both draft matrices. Nine Chromium browser workflows cover the scoped black-box cases in [`TEST-PLAN.md`](TEST-PLAN.md): graph adjustment, summaries, all capabilities and levels, full tables, references, independent profiles, reload, reset, manager context, and saved-profile compatibility. The browser command starts its own local server, or reuses one on port 5173. External links use intercepted navigation so the suite does not depend on third-party uptime or subscriptions. Touch/narrow-screen, unavailable-storage, and zoom cases remain explicitly deferred. `npm run build` performs TypeScript checking and a production Vite build.
+`npm test` runs three compiler tests, checks generated JSON freshness, and runs six model tests for levels, sources, profiles, next-level behavior, and both draft matrices. The Chromium workflows in [`TEST-PLAN.md`](TEST-PLAN.md) cover the graph and ladder views, saved-profile compatibility, two-tab editing, and unavailable browser storage. The browser command starts its own local server, or reuses one on port 5173. External links use intercepted navigation so the suite does not depend on third-party uptime or subscriptions. Touch/narrow-screen and zoom cases remain deferred. `npm run build` performs TypeScript checking and a production Vite build.
 
 ## Draft ladder and data
 

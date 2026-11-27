@@ -2,7 +2,7 @@
 
 Derived from immutable `KERNEL/requirements-v1.md`, `KERNEL/TEST-PLAN.md`, and `KERNEL/INVARIANTS.md`. The kernel wins if this file differs. Test through rendered UI and browser controls; use fresh browser sessions and record each view's defaults before editing. Content is checked against the kernel and applicable source data. No kernel files are edited.
 
-Keep automation small: nine browser workflows cover multiple cases, alongside compiler and model tests. Avoid DOM snapshots and styling checks except the explicitly required selection and italic instruction. Browser tests do not import implementation models. Run shared behavior in all three views where indicated.
+Keep automation small. Browser workflows cover multiple cases alongside compiler and model tests. Avoid DOM snapshots and styling checks except the explicitly required selection and italic instruction. Browser tests do not import implementation models. Run shared behavior in all three views where indicated.
 
 ## Happy paths
 
@@ -31,10 +31,12 @@ Keep automation small: nine browser workflows cover multiple cases, alongside co
 | EC-06 | Set all capabilities to the same level. | Both summary lists contain every capability exactly once in stable order, since all are tied. | Pass |
 | EC-07 | Select Software Engineer Staff/Principal; inspect all expanded levels and missing detailed cells. | Correct selected title and available summary; absent detailed content uses “—”, without substituting another level or removing graph levels. | Pass |
 | EC-08 | Seed old five-title manager values and saved General values; load the new manager dataset, adjust Collaboration, and reload. | The new manager ladder starts its example defaults using a new version; General values survive. New manager edits persist without reinterpreting old role positions. | Pass |
+| EC-09 | Open two tabs, edit different ladders, then edit the same ladder in both and reload. | Edits to one ladder preserve other ladders. The open tabs see saved changes to the same ladder, and saved values survive reload. | Automated |
+| EC-10 | Deny storage access or make writes fail. Edit and switch ladders, then reset one ladder. | The graph remains usable. A notice explains that edits may be lost on reload, and each ladder retains its own in-session values. | Automated |
 
 ## Deferred Weird Cases
 
-Explicitly deferred by the user: narrow screens/touch, unavailable browser storage, and long text/browser zoom. These are not counted as passing active cases. Existing responsive presentation is retained; no additional resilience features or test matrix is required for this milestone.
+Narrow screens/touch and long text/browser zoom remain deferred. Unavailable browser storage is covered by EC-10.
 
 ## Validation commands and results
 
@@ -71,3 +73,19 @@ Browser additions check manager context and source navigation, and profile compa
 Validated on 2026-10-01: `npm test` — 3 compiler tests, generated-data freshness check, and 6 model tests passed; `npm run test:uat` — 9 Chromium workflows passed in 49.1 seconds; `npm run build` — passed; `git diff --check` — passed. All kernel file hashes, including local historical sources, match the values recorded before implementation. Narrow-screen/touch, unavailable-storage, and zoom cases remain deferred. Vite continues to emit its existing bundle-size advisory; the final bundle is about 610 kB minified / 189 kB gzip.
 
 Desktop visual review at 1440 × 1000 confirmed the manager graph, M3–M8 slider marks, readable wrapped competency cells, selected-column shading, and visible synthesis labels. The page has no horizontal overflow at that size. A local Vite preview is available on port 5173 for review.
+
+## Profile persistence regression validation
+
+On 2026-11-18, the three new cases failed against the previous implementation. The two-tab case found Execution at level 4 after another tab had set it to 6. Denied and full storage made the graph unavailable. After the fix, all 12 Playwright workflows passed using headless Chromium 153. The compiler tests, generated-data freshness, six model tests, and production build passed. The build still reports the bundle-size advisory.
+
+## Persistence fix re-verification, 2026-11-27
+
+Before publishing the existing fix, the three compiler tests, generated-data
+freshness check, six model tests, and production build passed. Three focused
+Playwright cases also passed in 15.4 seconds: two-tab profile isolation and
+same-ladder synchronization, denied storage, and full storage. These ran against
+a fresh Vite server with the previously bundled headless Chromium because the
+default Playwright browser download was absent. The entire UI suite was not
+rerun for that verification. On the publishing retry, the source implementation
+was confirmed identical to the verified recovery patch; no functional changes
+were introduced. A PR is not evidence of merge or deployment.

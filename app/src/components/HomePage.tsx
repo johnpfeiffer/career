@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  Box, Button, Container, Divider, Link as MuiLink, Paper, Slider, Stack,
+  Alert, Box, Button, Container, Divider, Link as MuiLink, Paper, Slider, Stack,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography,
 } from "@mui/material";
 import { useOutletContext } from "react-router-dom";
@@ -8,29 +8,20 @@ import RadarChart from "./RadarChart";
 import LadderTable from "./LadderTable";
 import {
   clampLevel, ladders, getLadder, getExpectation, getLevelLabel,
-  getNextStep, getSummary, getProfileStorageKey, normalizeProfile, type Ladder, type Profile, type ViewId,
+  getNextStep, getSummary, type Profile, type ViewId,
 } from "../models/ladder";
 
-function readProfile(view: Ladder): Profile {
-  try {
-    const saved = localStorage.getItem(getProfileStorageKey(view))
-      ?? (view.id === "software-engineer" ? localStorage.getItem("career-coach-profile-v1") : null);
-    return normalizeProfile(view, JSON.parse(saved ?? "null"));
-  } catch {
-    return { ...view.defaultProfile };
-  }
-}
-
 export default function HomePage() {
-  const { viewId } = useOutletContext<{ viewId: ViewId }>();
+  const { viewId, profile, updateProfile, storageUnavailable } = useOutletContext<{
+    viewId: ViewId;
+    profile: Profile;
+    updateProfile: (changes: Profile) => void;
+    storageUnavailable: boolean;
+  }>();
   const view = getLadder(viewId);
-  const [profiles, setProfiles] = useState<Record<ViewId, Profile>>(() => Object.fromEntries(
-    ladders.map((item) => [item.id, readProfile(item)]),
-  ) as Record<ViewId, Profile>);
   const [selectedAxes, setSelectedAxes] = useState<Record<ViewId, string>>(() => Object.fromEntries(
     ladders.map((item) => [item.id, item.axes[0].id]),
   ) as Record<ViewId, string>);
-  const profile = profiles[view.id];
   const selectedAxisId = selectedAxes[view.id];
   const selectedAxis = view.axes.find((axis) => axis.id === selectedAxisId) ?? view.axes[0];
   const selectedLevel = profile[selectedAxis.id];
@@ -38,26 +29,17 @@ export default function HomePage() {
   const next = getNextStep(view, selectedAxis, selectedLevel);
   const summary = getSummary(view, profile);
 
-  useEffect(() => {
-    for (const item of ladders) {
-      localStorage.setItem(getProfileStorageKey(item), JSON.stringify(profiles[item.id]));
-    }
-  }, [profiles]);
-
   function selectAxis(id: string) {
     setSelectedAxes((current) => ({ ...current, [view.id]: id }));
   }
 
   function setAxisLevel(axisId: string, value: number) {
     selectAxis(axisId);
-    setProfiles((current) => ({
-      ...current,
-      [view.id]: { ...current[view.id], [axisId]: clampLevel(view, value) },
-    }));
+    updateProfile({ [axisId]: clampLevel(view, value) });
   }
 
   function resetExample() {
-    setProfiles((current) => ({ ...current, [view.id]: { ...view.defaultProfile } }));
+    updateProfile(view.defaultProfile);
   }
 
   return (
@@ -102,6 +84,11 @@ export default function HomePage() {
               {next ? `${next.label ?? view.levels[selectedLevel].label}: ${next.summary}` : "This is the highest level in this example ladder."}
             </Typography>
             <Button variant="text" onClick={resetExample} sx={{ textTransform: "none" }}>Reset to Default</Button>
+            {storageUnavailable && (
+              <Alert severity="warning" role="status" sx={{ mt: 2 }}>
+                Browser storage is unavailable. Changes may be lost when you reload.
+              </Alert>
+            )}
           </Box>
         </Box>
       </Paper>
